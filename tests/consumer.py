@@ -1,29 +1,21 @@
-#!/usr/bin/python
-import sys
+import json
+from random import randint
+from time import sleep
 
-from raichu.backends.base import Broker
-from raichu.backends import rabbitmq
+from tests.base_consumer import BaseConsumer
+
+params = {
+    'exchange_name': 'exchange',
+    'exchange_type': 'fanout',
+    'queue_name': 'queue',
+    'routing_key': 'queue',
+}
+
+def callback(ch, method, properties, body):
+    ch.basic_ack(delivery_tag = method.delivery_tag)
+    print("[x] %r" % body)
+
+consumer = BaseConsumer('rabbitmq', **params)
+consumer.consume(callback)
 
 
-def consumer(backend):
-    broker_parameters = {
-        'queue_name': 'queue',
-    }
-
-    def callback(ch, method, properties, body):
-        ch.basic_ack(delivery_tag = method.delivery_tag)
-        print("[x] %r" % body)
-
-    broker = Broker('rabbitmq')
-    raichu = broker.backend
-
-    raichu.queue_declare()
-    raichu.consume(callback)
-
-if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        backend = sys.argv[1]
-    else:
-        backend = 'rabbitmq'
-
-    consumer(backend)

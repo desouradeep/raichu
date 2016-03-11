@@ -25,7 +25,6 @@ class BaseBackend(object):
 
     def __init__(self, connection, **kwargs):
         self.connection = connection
-        self.extra_options = kwargs.get("extra_options")
 
     def queue_declare(self, *args, **kwargs):
         """Declare a queue by name."""
