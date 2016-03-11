@@ -1,3 +1,20 @@
+from importlib import import_module
+
+from raichu.config import MESSAGE_BROKER_BACKENDS
+
+
+class Broker(object):
+    def __init__(self, backend, **kwargs):
+        broker_backend = MESSAGE_BROKER_BACKENDS.get(backend, None)
+        if broker_backend:
+            broker_engine = broker_backend.get('ENGINE', None)
+            broker_host = broker_backend.get('HOST', None)
+            broker_port = broker_backend.get('PORT', None)
+
+            if broker_engine:
+                self.backend = import_module(broker_engine).Backend(**kwargs)
+
+
 class BaseBackend(object):
     """Base class for backends."""
     default_port = None
