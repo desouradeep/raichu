@@ -5,17 +5,17 @@ from time import sleep
 from tests.base_consumer import BaseConsumer
 
 params = {
-    'exchange_name': 'exchange',
+    'exchange_name': 'raichu',
     'exchange_type': 'fanout',
-    'queue_name': 'queue',
-    'routing_key': 'queue',
+    'queue_name': 'raichu',
+    'routing_key': 'raichu',
 }
 
-def callback(ch, method, properties, body):
-    ch.basic_ack(delivery_tag = method.delivery_tag)
+def callback(ch=None, method=None, properties=None, body=None):
+    #ch.basic_ack(delivery_tag = method.delivery_tag)
     print("[x] %r" % body)
 
 consumer = BaseConsumer('rabbitmq', **params)
-consumer.consume(callback)
+consumer.consume(callback=callback)
 
 

@@ -34,7 +34,8 @@ class Backend(BaseBackend):
         print '[x] Queue %s declared' % (routing_key)
         return queue
 
-    def queue_bind(self, queue_name, exchange_name, routing_key, **kwargs):
+    def queue_bind(self, queue_name='', exchange_name='',
+            routing_key='', **kwargs):
         """Bind a queue to an exchange."""
         self.channel.queue_bind(
             exchange=exchange_name, queue=queue_name,

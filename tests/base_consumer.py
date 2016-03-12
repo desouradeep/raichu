@@ -4,7 +4,7 @@ from raichu.backends import rabbitmq
 
 
 class BaseConsumer(object):
-    def __init__(self, backend, **kwargs):
+    def __init__(self, backend, *args, **kwargs):
         broker = Broker(backend, **kwargs)
         self.raichu = broker.backend
 
@@ -13,7 +13,9 @@ class BaseConsumer(object):
         self.queue_name = kwargs.get('queue_name', 'raichu_queue')
         self.routing_key = kwargs.get('routing_key', self.queue_name)
 
-        self.raichu.queue_declare(self.routing_key)
+        self.raichu.queue_declare(self.routing_key, action='CONSUME')
+        self.raichu.queue_bind(self.queue_name,
+                self.exchange_name, self.routing_key, action='CONSUME')
 
     def consume(self, callback, no_ack=False, **kwargs):
         self.raichu.consume(self.queue_name, callback, no_ack, **kwargs)

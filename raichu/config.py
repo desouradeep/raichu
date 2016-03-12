@@ -4,8 +4,8 @@ MESSAGE_BROKER_BACKENDS = {
         'HOST': 'localhost',
         'PORT': 15672,
     },
-    'zmq': {
-        'ENGINE': 'raichu.backends.zmq',
+    'zeromq': {
+        'ENGINE': 'raichu.backends.zeromq',
         'HOST': 'localhost',
         'PORT': 5556,
     }
